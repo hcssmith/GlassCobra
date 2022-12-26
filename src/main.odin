@@ -16,9 +16,9 @@ main :: proc() {
 
   y:= reader->parse_file()
 
-  //for x:=0;x<len(y.Elements);x+=1 {
-  //  fmt.printf("{0}\n", y.Elements[x])
-  //}
+  for x:=0;x<len(y.Elements);x+=1 {
+    fmt.printf("{0}\n", y.Elements[x])
+  }
 
 }
 

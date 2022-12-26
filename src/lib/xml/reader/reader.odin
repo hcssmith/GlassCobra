@@ -155,7 +155,7 @@ parse_file :: proc(self: ^XMLReader) -> (types.XMLDocument) {
         textOnlyElement.ID = doc->getNewElementId()
         textOnlyElement.Text = strings.trim_space(self._buf->out())
         if textOnlyElement.Text != "" {
-          textOnlyElement.Parent = (^int)(estack->skim().data)^
+          textOnlyElement.Parent = (^types.ElementID)(estack->skim())^
           doc->addElement(textOnlyElement)
         }
         self._buf->clear()
@@ -179,7 +179,7 @@ parse_file :: proc(self: ^XMLReader) -> (types.XMLDocument) {
         if r == nil {
           elem.Parent = 0
         } else {
-          elem.Parent = (^int)(r.data)^
+          elem.Parent = (^types.ElementID)(r)^
         }
         doc->addElement(elem)
       }
