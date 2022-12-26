@@ -1,9 +1,5 @@
 package util
 
-import "core:fmt"
-
-import "core:runtime"
-
 Stack :: struct {
   using base: Obj,
   // fields
@@ -32,24 +28,18 @@ init_stack :: proc(self: ^Stack, type: typeid) {
 }
 
 int_push :: proc(self: ^Stack, item: int) {
-  fmt.printf("Pushing: {0}\n", item)
-  fmt.printf("Arr:{0} ptr:{1}\n", self.arr, self.ptr)
   using self
   append(&arr, item)
   ptr += 1
 }
 
 int_skim :: proc(self: ^Stack) -> Maybe(int) {
-  fmt.printf("skim\n")
-  fmt.printf("Arr:{0} ptr:{1}\n", self.arr, self.ptr)
   using self
   if ptr == 0 {return nil}
   return arr[ptr-1]
 }
 
 int_pop :: proc(self: ^Stack) -> Maybe(int) {
-  fmt.printf("pop\n")
-  fmt.printf("Arr:{0} ptr:{1}\n", self.arr, self.ptr)
   using self
   if ptr == 0 {return nil}
   r := self->skim()
