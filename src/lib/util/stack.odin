@@ -8,12 +8,12 @@ Stack :: struct {
   using base: Obj,
   // fields
   ptr: int, // 0 is empty, 
-  arr: [dynamic]rawptr,
+  arr: [dynamic]int,
   type: typeid,
   // functions
-  push:proc(^Stack, any),
-  pop:proc(^Stack) -> rawptr,
-  skim:proc(^Stack) -> rawptr,
+  push:proc(^Stack, int),
+  pop:proc(^Stack) -> Maybe(int),
+  skim:proc(^Stack) -> Maybe(int),
 }
 
 init_stack :: proc(self: ^Stack, type: typeid) {
@@ -21,32 +21,40 @@ init_stack :: proc(self: ^Stack, type: typeid) {
   
   self.type = type
   self.ptr = 0
-
-  self.push = push
-  self.pop = pop
-  self.skim = skim
+  switch type {
+    case int:
+      self.push = int_push
+      self.pop = int_pop
+      self.skim = int_skim
+      break
+    case:
+  }
 }
 
-push :: proc(self: ^Stack, item: any) {
+int_push :: proc(self: ^Stack, item: int) {
+  fmt.printf("Pushing: {0}\n", item)
+  fmt.printf("Arr:{0} ptr:{1}\n", self.arr, self.ptr)
   using self
-  if item.id != type {
-    return
-  }
-  append(&arr, item.data)
+  append(&arr, item)
   ptr += 1
 }
 
-skim :: proc(self: ^Stack) -> rawptr {
+int_skim :: proc(self: ^Stack) -> Maybe(int) {
+  fmt.printf("skim\n")
+  fmt.printf("Arr:{0} ptr:{1}\n", self.arr, self.ptr)
   using self
   if ptr == 0 {return nil}
   return arr[ptr-1]
 }
 
-pop :: proc(self: ^Stack) -> rawptr {
+int_pop :: proc(self: ^Stack) -> Maybe(int) {
+  fmt.printf("pop\n")
+  fmt.printf("Arr:{0} ptr:{1}\n", self.arr, self.ptr)
   using self
   if ptr == 0 {return nil}
   r := self->skim()
   resize_dynamic_array(&arr, ptr-1)
+  ptr -= 1
   return r
 
 }
